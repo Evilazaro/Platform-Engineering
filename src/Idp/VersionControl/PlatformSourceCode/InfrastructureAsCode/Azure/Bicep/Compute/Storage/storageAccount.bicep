@@ -71,6 +71,9 @@ param publicNetworkAccess string = 'Disabled'
 ])
 param allowBlobPublicAccess bool = false
 
+@description('Storage account tags')
+param tags object 
+
 @description('Deploy Storage account resource to Azure')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   name: name
@@ -84,6 +87,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
     publicNetworkAccess: publicNetworkAccess
     allowBlobPublicAccess: allowBlobPublicAccess
   }
+  tags: tags
 }
 
 @description('Output the storage account name')
@@ -94,3 +98,6 @@ output storageAccountId string = storageAccount.id
 
 @description('Output the storage account url')
 output storageAccountUrl string = storageAccount.properties.primaryEndpoints.blob
+
+@description('Output the storage account tags')
+output storageAccountTags object = storageAccount.tags
