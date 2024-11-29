@@ -57,20 +57,6 @@ param kind string
 ])
 param accessTier string = 'Hot'
 
-@description('Storage account public network access')
-@allowed([
-  'Enabled'
-  'Disabled'
-])
-param publicNetworkAccess string = 'Disabled'
-
-@description('Allow blob public access')
-@allowed([
-  true
-  false
-])
-param allowBlobPublicAccess bool = false
-
 @description('Storage account tags')
 param tags object 
 
@@ -84,8 +70,6 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   kind: kind
   properties: {
     accessTier: accessTier
-    publicNetworkAccess: publicNetworkAccess
-    allowBlobPublicAccess: allowBlobPublicAccess
   }
   tags: tags
 }

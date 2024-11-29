@@ -1,5 +1,5 @@
 @description('Storage account name')
-var name = 'eycanvasstorage'
+var name = 'eycanvasstorage4'
 
 @description('Storage account location')
 var location = 'westus3'
@@ -12,12 +12,6 @@ var kind = 'StorageV2'
 
 @description('Storage Account access tier')
 var accessTier = 'Hot'
-
-@description('Storage account public network access')
-var publicNetworkAccess = 'Disabled'
-
-@description('Allow blob public access')
-var allowBlobPublicAccess = false
 
 @description('Storage account tags')
 var tags = {
@@ -37,15 +31,13 @@ var tags = {
 }
 
 module storageAccount 'storageAccount.bicep' = {
-  name: name
+  name: 'Storage-Account'
   params: {
     name: name
     location: location
     sku: sku
     kind: kind
     accessTier: accessTier
-    publicNetworkAccess: publicNetworkAccess
-    allowBlobPublicAccess: allowBlobPublicAccess
     tags: tags
   }
 }
@@ -66,7 +58,7 @@ output storageAccountTags object = storageAccount.outputs.storageAccountTags
 var containerName = 'eycanvascontainer'
 
 module container 'Container/container.bicep' = {
-  name: containerName
+  name: 'Container'
   params: {
     name: containerName
     storageAccountName: name
@@ -87,3 +79,17 @@ output containerName string = container.outputs.containerName
 
 @description('Output the container id')
 output containerId string = container.outputs.containerId
+
+@description('Storage Account Queue name')
+var queueName = 'eycanvasqueue'
+
+module queue 'Queue/queue.bicep' = {
+  name: 'Storage-Queue'
+  params: {
+    name: queueName
+    storageAccountName: name
+  }
+  dependsOn: [
+    storageAccount
+  ]
+}

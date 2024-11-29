@@ -6,21 +6,13 @@ param name string
 @minLength(3)
 param storageAccountName string
 
-@description('Allow Public Access')
-@allowed([
-  'None'
-  'Blob'
-  'Container'
-])
-param allowPublicAccess string = 'None'
-
 @description('Existing Storage Account')
 resource existingStorageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' existing = {
   name: storageAccountName
 }
 
 @description('Existing Storage account blob service')
-resource existingBlobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' existing = {
+resource blobService 'Microsoft.Storage/storageAccounts/blobServices@2023-05-01' existing = {
   name: 'default'
   parent: existingStorageAccount
 }
@@ -28,17 +20,14 @@ resource existingBlobService 'Microsoft.Storage/storageAccounts/blobServices@202
 @description('Deploy Storage account container resource to Azure')
 resource storageAccountContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   name: name
-  parent: existingBlobService
-  properties:{
-    publicAccess: allowPublicAccess
-  }
+  parent: blobService
 }
 
 @description('Output the blob service name')
-output blobServiceName string = existingBlobService.name
+output blobServiceName string = blobService.name
 
 @description('Output the blob service id')
-output blobServiceId string = existingBlobService.id
+output blobServiceId string = blobService.id
 
 @description('Output the container name')
 output containerName string = storageAccountContainer.name
