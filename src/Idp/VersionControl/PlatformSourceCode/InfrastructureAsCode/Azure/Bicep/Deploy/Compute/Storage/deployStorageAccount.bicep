@@ -3,6 +3,8 @@
 @maxLength(22)
 param workloadName string
 
+@description('Resource Group Name')
+var resourceGroupName = resourceGroup().name
 
 @description('Virtual Network Location')
 var location  = 'West US 3'
@@ -42,7 +44,7 @@ var tags = {
 
 module storageAccount '../../../Compute/Storage/storageAccount.bicep' = {
   name: name
-  scope: resourceGroup()
+  scope: resourceGroup(resourceGroupName)
   params: {
     name: name
     location: location

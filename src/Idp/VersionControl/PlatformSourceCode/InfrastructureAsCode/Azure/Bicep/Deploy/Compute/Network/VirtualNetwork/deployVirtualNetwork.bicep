@@ -1,6 +1,9 @@
 @description('Solution/Workload Name')
 param workloadName string = 'mySolution'
 
+@description('Resource Group Name')
+param resourceGroupName string = resourceGroup().name
+
 @description('Virtual Network Name')
 var name = '${workloadName}-Vnet'
 
@@ -79,7 +82,7 @@ var tags = {
 @description('Deploy Virtual Network Resource')
 module deployVirtualNetwork '../../../../Compute/Network/VirtualNetwork/virtualNetwork.bicep' = {
   name: name
-  scope: resourceGroup()
+  scope: resourceGroup(resourceGroupName)
   params: {
     name: name
     location: location
