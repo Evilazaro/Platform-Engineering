@@ -4,19 +4,35 @@ param devCenterName string
 var catalogs = [
   {
     name: 'catalog1'
-    adoGit: {}
-    gitHub: {
-      uri: 'https://github.com/Evilazaro/DevExp-MicrosoftDevBox.git'
-      branch: 'main'
-      path: '/customizations/tasks'
-    }
+    uri: 'https://github.com/Evilazaro/DevExp-MicrosoftDevBox.git'
+    branch: 'main'
+    path: '/customizations/tasks'
     syncType: 'Scheduled'
+    type: 'GitHub'
   }
   {
     name: 'catalog2'
-    adoGit: {}
-    gitHub: {}
+    uri: 'https://github.com/Evilazaro/DevExp-MicrosoftDevBox.git'
+    branch: 'main'
+    path: '/customizations/tasks'
     syncType: 'Scheduled'
+    type: 'GitHub'
+  }
+  {
+    name: 'catalog3'
+    uri: 'https://github.com/Evilazaro/DevExp-MicrosoftDevBox.git'
+    branch: 'main'
+    path: '/customizations/tasks'
+    syncType: 'Scheduled'
+    type: 'GitHub'
+  }
+  {
+    name: 'catalog4'
+    uri: 'https://github.com/Evilazaro/DevExp-MicrosoftDevBox.git'
+    branch: 'main'
+    path: '/customizations/tasks'
+    syncType: 'Scheduled'
+    type: 'GitHub'
   }
 ]
 
@@ -38,10 +54,12 @@ module deployCatalog '../../../../DevEx/DevCenter/EnvironmentConfiguration/catal
     params: {
       name: catalog.name
       tags: tags
-      adoGit: catalog.adoGit
       devCenterName: devCenterName
-      gitHub: catalog.gitHub
       syncType: catalog.syncType
+      type: catalog.type
+      uri: catalog.uri
+      branch: catalog.branch
+      path: catalog.path
     }
   }
 ]
