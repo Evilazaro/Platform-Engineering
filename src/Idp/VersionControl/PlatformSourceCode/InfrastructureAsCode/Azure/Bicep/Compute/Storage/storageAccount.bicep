@@ -3,40 +3,8 @@
 @minLength(3)
 param name string
 
-
 @description('Storage Account Location')
-@allowed([
-  'East US'
-  'East US 2'
-  'West US'
-  'West US 2'
-  'West US 3'
-  'North Central US'
-  'South Central US'
-  'Central US'
-  'West Central US'
-  'Canada Central'
-  'Canada East'
-  'Brazil South'
-  'North Europe'
-  'West Europe'
-  'UK South'
-  'UK West'
-  'France Central'
-  'France South'
-  'Switzerland North'
-  'Switzerland West'
-  'Germany North'
-  'Germany West Central'
-  'Norway East'
-  'Norway West'
-  'Poland Central'
-  'UAE North'
-  'UAE Central'
-  'South Africa North'
-  'South Africa West'
-])
-param location string = 'West US 3'
+param location string = resourceGroup().location
 
 @description('Storage account Sku')
 @allowed([
@@ -60,14 +28,14 @@ param kind string
   'Hot'
   'Cool'
 ])
-param accessTier string = 'Hot'
+param accessTier string
 
 @description('Storage account tags')
 param tags object 
 
 @description('Deploy Storage account resource to Azure')
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
-  name: name
+  name: '${uniqueString(resourceGroup().id, name)}sa'
   location: location
   sku: {
     name: sku

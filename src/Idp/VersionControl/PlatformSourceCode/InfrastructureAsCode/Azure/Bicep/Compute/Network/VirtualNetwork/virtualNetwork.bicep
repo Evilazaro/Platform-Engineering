@@ -11,17 +11,34 @@ param addressPrefixes array
 param subnets array
 
 @description('Tags')
-param tags object 
+param tags object
+
+@description('Enable DDoS Protection')
+@allowed([
+  false
+  true
+])
+param enableDdosProtection bool = false
+
+@description('DDoS Protection Plan')
+resource ddosProtectionPlan 'Microsoft.Network/ddosProtectionPlans@2024-05-01' = if (enableDdosProtection) {
+  name: uniqueString(resourceGroup().id, 'ddosProtectionPlan')
+  location: location
+}
 
 @description('Virtual Network Resource')
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2024-03-01' = {
-  name: name
+  name: '${uniqueString(resourceGroup().id, name)}-vnet'
   location: location
   tags: tags
   properties:{
     addressSpace:{
       addressPrefixes:addressPrefixes
     }
+    enableDdosProtection: enableDdosProtection
+    ddosProtectionPlan: enableDdosProtection ? {
+      id: ddosProtectionPlan.id
+    } : null
     subnets:subnets
   }
 }

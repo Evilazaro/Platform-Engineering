@@ -2,37 +2,6 @@
 param name string
 
 @description('Location')
-@allowed([
-  'East US'
-  'East US 2'
-  'West US'
-  'West US 2'
-  'West US 3'
-  'North Central US'
-  'South Central US'
-  'Central US'
-  'West Central US'
-  'Canada Central'
-  'Canada East'
-  'Brazil South'
-  'North Europe'
-  'West Europe'
-  'UK South'
-  'UK West'
-  'France Central'
-  'France South'
-  'Switzerland North'
-  'Switzerland West'
-  'Germany North'
-  'Germany West Central'
-  'Norway East'
-  'Norway West'
-  'Poland Central'
-  'UAE North'
-  'UAE Central'
-  'South Africa North'
-  'South Africa West'
-])
 param location string 
 
 @description('Catalog Item Sync Enable Status')
@@ -61,7 +30,7 @@ param installAzureMonitorAgentEnableStatus string
 param tags object
 
 resource devCenter 'Microsoft.DevCenter/devcenters@2024-10-01-preview' = {
-  name: name
+  name: '${uniqueString(resourceGroup().id, name)}-devcenter'
   location: location
   tags: tags
   properties: {

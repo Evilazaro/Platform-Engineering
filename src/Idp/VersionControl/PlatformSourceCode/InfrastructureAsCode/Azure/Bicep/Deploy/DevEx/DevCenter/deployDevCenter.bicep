@@ -1,46 +1,6 @@
 @description('Workload Name')
 param workloadName string
 
-@description('Resource Group Name')
-param resourceGroupName string = resourceGroup().name
-
-@description('Storage Account Location')
-@allowed([
-  'East US'
-  'East US 2'
-  'West US'
-  'West US 2'
-  'West US 3'
-  'North Central US'
-  'South Central US'
-  'Central US'
-  'West Central US'
-  'Canada Central'
-  'Canada East'
-  'Brazil South'
-  'North Europe'
-  'West Europe'
-  'UK South'
-  'UK West'
-  'France Central'
-  'France South'
-  'Switzerland North'
-  'Switzerland West'
-  'Germany North'
-  'Germany West Central'
-  'Norway East'
-  'Norway West'
-  'Poland Central'
-  'UAE North'
-  'UAE Central'
-  'South Africa North'
-  'South Africa West'
-])
-param location string = 'West US 3'
-
-@description('Dev Center Name')
-var name = '${workloadName}-devCenter'
-
 @description('Catalog Item Sync Enable Status')
 var catalogItemSyncEnableStatus = 'Enabled'
 
@@ -68,12 +28,12 @@ var tags = {
 
 @description('Deploy Dev Center resource to Azure')
 module deployDevCenter '../../../DevEx/DevCenter/devCenter.bicep' = {
-  name: name
-  scope: resourceGroup(resourceGroupName)
+  name: workloadName
+  scope: resourceGroup()
   params: {
-    name: name
+    name: workloadName
     tags: tags
-    location: location
+    location: resourceGroup().location
     catalogItemSyncEnableStatus: catalogItemSyncEnableStatus
     microsoftHostedNetworkEnableStatus: microsoftHostedNetworkEnableStatus
     installAzureMonitorAgentEnableStatus: installAzureMonitorAgentEnableStatus
