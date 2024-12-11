@@ -3,22 +3,19 @@
 param workloadName string
 
 @description('Resource Group Name')
-param resourceGroupName string = resourceGroup().name
-
-@description('Virtual Network Name')
-var virtualNetworkName = '${workloadName}-virtualNetwork'
+param virtualNetworkResourceGroupName string = resourceGroup().name
 
 @description('Subnet Name')
-var subnetName = '${workloadName}-subnet'
+param subnetName string
 
 @description('Deploy Network Connection')
 module deployNetworkConnection '../../../../DevEx/DevCenter/NetworkConnection/networkConnection.bicep' = {
-  name: 'deployNetworkConnection'
-  scope: resourceGroup(resourceGroupName)
+  name: 'networkConnection'
+  scope: resourceGroup(virtualNetworkResourceGroupName)
   params: {
-    virtualNetworkName: virtualNetworkName
+    virtualNetworkName: '${uniqueString(resourceGroup().id, workloadName)}-vnet'
     subnetName: subnetName
-    virtualNetworkResourceGroupName: resourceGroupName
+    virtualNetworkResourceGroupName: virtualNetworkResourceGroupName
     domainJoinType: 'AzureADJoin'
   }
 }

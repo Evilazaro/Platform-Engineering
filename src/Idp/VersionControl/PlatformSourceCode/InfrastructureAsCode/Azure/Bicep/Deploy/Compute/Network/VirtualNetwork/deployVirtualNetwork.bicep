@@ -49,7 +49,7 @@ var tags = {
 
 @description('Deploy Virtual Network Resource')
 module deployVirtualNetwork '../../../../Compute/Network/VirtualNetwork/virtualNetwork.bicep' = {
-  name: workloadName
+  name: 'VirtualNetwork'
   scope: resourceGroup()
   params: {
     name: workloadName
