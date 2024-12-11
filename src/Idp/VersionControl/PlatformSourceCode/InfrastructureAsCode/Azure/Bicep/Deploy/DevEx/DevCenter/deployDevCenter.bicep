@@ -28,7 +28,7 @@ var tags = {
 
 @description('Deploy Dev Center resource to Azure')
 module deployDevCenter '../../../DevEx/DevCenter/devCenter.bicep' = {
-  name: workloadName
+  name: 'DevCenter'
   scope: resourceGroup()
   params: {
     name: workloadName
