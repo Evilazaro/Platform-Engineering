@@ -57,3 +57,13 @@ output installAzureMonitorAgentEnableStatus string = deployDevCenter.outputs.dev
 
 @description('Output Dev Center location')
 output devCenterLocation string = deployDevCenter.outputs.devCenterLocation
+
+@description('Attach Dev Center to Network Connection')
+module networkConnectionAttachment '../../../DevEx/DevCenter/NetworkConnection/networkConnectionAttachment.bicep' = {
+  name: 'DevCenter-NetworkConnection-Attachment'
+  params: {
+    devCenterName: deployDevCenter.name
+    name: devCenterName
+    networkConnectionResourceGroupName: 
+  }
+}
