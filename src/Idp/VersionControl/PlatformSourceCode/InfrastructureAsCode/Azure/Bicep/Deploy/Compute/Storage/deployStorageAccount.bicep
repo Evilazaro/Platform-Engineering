@@ -3,20 +3,19 @@
 @maxLength(22)
 param workloadName string
 
-@description('Resource Group Name')
-var resourceGroupName = resourceGroup().name
-
-@description('Virtual Network Location')
-var location  = 'West US 3'
-
-@description('Storage Account Name')
-var name = toLower('${workloadName}sa')
+@description('Environment Type')
+@allowed([
+  'nonprod'
+  'prod'
+  'dev'
+])
+param environmentType string = 'dev'
 
 @description('SKU for the storage account')
-var sku = 'Standard_LRS'
+var sku = (environmentType == 'prod') ? 'Standard_GRS' : 'Standard_LRS'
 
 @description('Kind of storage account')
-var kind = 'StorageV2'
+var kind = ('StorageV2')
 
 @description('Acces Tier')
 var accessTier = 'Hot'
@@ -43,11 +42,10 @@ var tags = {
 }
 
 module storageAccount '../../../Compute/Storage/storageAccount.bicep' = {
-  name: name
-  scope: resourceGroup(resourceGroupName)
+  name: workloadName
+  scope: resourceGroup()
   params: {
-    name: name
-    location: location
+    name: workloadName
     sku: sku
     kind: kind
     accessTier: accessTier

@@ -1,45 +1,13 @@
 @description('Solution/Workload Name')
-param workloadName string = 'mySolution'
+param workloadName string = 'myWorkloadName'
 
-@description('Resource Group Name')
-param resourceGroupName string = resourceGroup().name
-
-@description('Virtual Network Name')
-var name = '${workloadName}-Vnet'
-
-@description('Virtual Network Location')
+@description('Environment Type')
 @allowed([
-  'East US'
-  'East US 2'
-  'West US'
-  'West US 2'
-  'West US 3'
-  'North Central US'
-  'South Central US'
-  'Central US'
-  'West Central US'
-  'Canada Central'
-  'Canada East'
-  'Brazil South'
-  'North Europe'
-  'West Europe'
-  'UK South'
-  'UK West'
-  'France Central'
-  'France South'
-  'Switzerland North'
-  'Switzerland West'
-  'Germany North'
-  'Germany West Central'
-  'Norway East'
-  'Norway West'
-  'Poland Central'
-  'UAE North'
-  'UAE Central'
-  'South Africa North'
-  'South Africa West'
+  'nonprod'
+  'prod'
+  'dev'
 ])
-param location string = 'West US 3'
+param environmentType string = 'dev'
 
 @description('Virtual Network Address Prefixes')
 var addressPrefixes = [
@@ -76,17 +44,18 @@ var tags = {
   owner: 'John Doe'
   team: 'Platform Engineering'
   stack: 'Azure'
-  location: location
+  location: resourceGroup().location
 }
 
 @description('Deploy Virtual Network Resource')
 module deployVirtualNetwork '../../../../Compute/Network/VirtualNetwork/virtualNetwork.bicep' = {
-  name: name
-  scope: resourceGroup(resourceGroupName)
+  name: workloadName
+  scope: resourceGroup()
   params: {
-    name: name
-    location: location
+    name: workloadName
+    location: resourceGroup().location
     tags: tags
+    enableDdosProtection: (environmentType == 'prod')
     addressPrefixes: addressPrefixes
     subnets: subnets
   }
