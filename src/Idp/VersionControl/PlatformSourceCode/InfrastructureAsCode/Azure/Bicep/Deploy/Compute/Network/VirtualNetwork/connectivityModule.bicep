@@ -18,15 +18,15 @@ var addressPrefixes = [
 var subnets = [
   {
     name: 'default'
-    properties: {
-      addressPrefix: '10.0.0.0/24'
-    }
   }
   {
-    name: 'myAppSubnet'
-    properties: {
-      addressPrefix: '10.0.1.0/24'
-    }
+    name: 'myApp'
+  }
+  {
+    name: 'myAppDb'
+  }
+  {
+    name: 'myAppAKS'
   }
 ]
 
@@ -47,6 +47,16 @@ var tags = {
   location: resourceGroup().location
 }
 
+@description('Deploy DDoS Protection Plan Resource')
+module ddosProtectionPlan '../../../../Compute/Network/DDoSPlan/DDoSPlan.bicep' = if (environmentType == 'prod') {
+  name: 'DDoSProtectionPlan'
+  scope: resourceGroup()
+  params: {
+    name: workloadName
+  }
+}
+
+
 @description('Deploy Virtual Network Resource')
 module deployVirtualNetwork '../../../../Compute/Network/VirtualNetwork/virtualNetwork.bicep' = {
   name: 'VirtualNetwork'
@@ -55,26 +65,10 @@ module deployVirtualNetwork '../../../../Compute/Network/VirtualNetwork/virtualN
     name: workloadName
     location: resourceGroup().location
     tags: tags
-    enableDdosProtection: (environmentType == 'prod')
     addressPrefixes: addressPrefixes
     subnets: subnets
+    enableDdosProtection: environmentType == 'prod'
+    ddosProtectionPlanId: (environmentType == 'prod') ? ddosProtectionPlan.outputs.ddosProtectionPlanId : ''
   }
 }
 
-@description('Virtual Network Resource ID')
-output virtualNetworkId string = deployVirtualNetwork.outputs.virtualNetworkId
-
-@description('Virtual Network Resource Name')
-output virtualNetworkName string = deployVirtualNetwork.outputs.virtualNetworkName
-
-@description('Virtual Network Resource Location')
-output virtualNetworkLocation string = deployVirtualNetwork.outputs.virtualNetworkLocation
-
-@description('Virtual Network Resource Address Prefixes')
-output virtualNetworkAddressPrefixes array = deployVirtualNetwork.outputs.virtualNetworkAddressPrefixes
-
-@description('Virtual Network Resource Subnets')
-output virtualNetworkSubnets array = deployVirtualNetwork.outputs.virtualNetworkSubnets
-
-@description('Tags')
-output virtualNetworkTags object = deployVirtualNetwork.outputs.virtualNetworkTags
