@@ -22,9 +22,3 @@ resource storageQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@20
   parent: storageQueueService
 }
 
-@description('Output the storage queue name')
-output storageQueueName string = storageQueue.name
-
-@description('Output the storage queue id')
-output storageQueueId string = storageQueue.id
-

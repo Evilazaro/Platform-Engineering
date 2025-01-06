@@ -46,21 +46,3 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-05-01' = {
   }
   tags: tags
 }
-
-@description('Storage Account Resource Id')
-output storageAccountId string = storageAccount.id
-
-@description('Output the storage account name')
-output storageAccountName string = storageAccount.name
-
-@description('Output the storage account url')
-output storageAccountUrl string = storageAccount.properties.primaryEndpoints.blob
-
-@description('Output the storage account sku')
-output storageAccountSku string = storageAccount.sku.name
-
-@description('Output the storage account kind')
-output storageAccountKind string = storageAccount.kind
-
-@description('Output the storage account tags')
-output storageAccountTags object = storageAccount.tags
