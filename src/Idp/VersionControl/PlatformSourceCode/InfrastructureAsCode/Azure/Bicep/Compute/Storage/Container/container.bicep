@@ -23,17 +23,3 @@ resource storageAccountContainer 'Microsoft.Storage/storageAccounts/blobServices
   parent: blobService
 }
 
-@description('Output the blob service name')
-output blobServiceName string = blobService.name
-
-@description('Output the blob service id')
-output blobServiceId string = blobService.id
-
-@description('Output the container name')
-output containerName string = storageAccountContainer.name
-
-@description('Output the container id')
-output containerId string = storageAccountContainer.id
-
-@description('Output the container public access')
-output containerUrl string = storageAccountContainer.properties.publicAccess
